@@ -5,9 +5,21 @@ window.onload = function() {
 
   FMEServer.init({
     server : "https://esb-demo-fme-server-support.fmecloud.com",
-    token : "81d85055c792bd50a056676b955cb2da4cbdd96c"
+    token : "2f2a58e94754226b6a45f23d7576454a39855b14"
+
   });
 
+  //Initialize WebSocket listener
+  var ws = FMEServer.getWebSocketConnection('ESB');
+
+	ws.onmessage = function (event) {
+     var dt = new Date();
+     var utcDate = dt.toUTCString();
+     var message = "<p>" + utcDate + ":" + event.data + "</p>";
+     $("#ws").append(message);
+	};
+
+  //loop through workspace array
   for (i = 0; i < workspaces.length; i++) {
     var workspace = workspaces[i];
     createForm(workspace);
@@ -32,8 +44,9 @@ function createForm( workspace ) {
     button.setAttribute( "onclick", "submitJob('"+ workspace +"');" );
     form.appendChild( button );
   }
-
 }
+
+
 
 function showResults( json ) {
   // The following is to write out the full return object
@@ -65,6 +78,7 @@ function showResults( json ) {
   $(this).addClass('selected').siblings().removeClass('selected');
    var value=$(this).find('td:nth-child(9)').html();
    $("input[name=MessageID]").val(value);
+
 });
 };
 
@@ -93,3 +107,23 @@ function submitJob(workspace) {
   // Submit Job to FME Server and run synchronously
   FMEServer.runDataStreaming( repository, workspace, params, showResults );
 }
+
+setTimeout(doSomething, 1000);
+
+function doSomething(){
+
+  $("#311MessageDBsummary\\.fmw span.db_connection.fmes-form-component select").prop("disabled", true);
+
+  $("#UpdateDepartmentDB\\.fmw span.db_connection.fmes-form-component select").change(function() {
+  var val = $(this).val();
+  $('#311MessageDBsummary\\.fmw span.db_connection.fmes-form-component select option').each(function(){
+    var val2 = $(this).html();
+    console.log(val2);
+    if (val2 == val) {
+      $(this).prop('selected', true);
+    } else {
+      $(this).prop('selected', false);
+    }
+  });
+});
+};
