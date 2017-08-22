@@ -118,7 +118,6 @@ function doSomething(){
   var val = $(this).val();
   $('#311MessageDBsummary\\.fmw span.db_connection.fmes-form-component select option').each(function(){
     var val2 = $(this).html();
-    console.log(val2);
     if (val2 == val) {
       $(this).prop('selected', true);
     } else {
