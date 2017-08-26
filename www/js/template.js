@@ -4,8 +4,8 @@ repository = "311ESB";
 window.onload = function() {
 
   FMEServer.init({
-    server : "https://esb-demo-fme-server-support.fmecloud.com",
-    token : "2f2a58e94754226b6a45f23d7576454a39855b14"
+    server : "https://demos-safe-software.fmecloud.com",
+    token : "568c604bc1f235bbe137c514e7c61a8436043070"
 
   });
 
