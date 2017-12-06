@@ -12,12 +12,12 @@ window.onload = function() {
   //Initialize WebSocket listener
   var ws = FMEServer.getWebSocketConnection('ESB');
 
-	ws.onmessage = function (event) {
-     var dt = new Date();
-     var utcDate = dt.toUTCString();
-     var message = "<p>" + utcDate + ":" + event.data + "</p>";
-     $("#ws").append(message);
-	};
+  ws.onmessage = function (event) {
+    var dt = new Date();
+    var utcDate = dt.toUTCString();
+    var message = "<p>" + utcDate + ":" + event.data + "</p>";
+    $("#ws").append(message);
+  };
 
   //loop through workspace array
   for (i = 0; i < workspaces.length; i++) {
@@ -43,10 +43,9 @@ function createForm( workspace ) {
     button.value = "Submit/Reload";
     button.setAttribute( "onclick", "submitJob('"+ workspace +"');" );
     form.appendChild( button );
+    setDefaults()
   }
 }
-
-
 
 function showResults( json ) {
   // The following is to write out the full return object
@@ -75,11 +74,11 @@ function showResults( json ) {
 
   //Select table row and use 9th column as value in other parameter
   $(".table tbody tr").click(function(){
-  $(this).addClass('selected').siblings().removeClass('selected');
-   var value=$(this).find('td:nth-child(9)').html();
-   $("input[name=MessageID]").val(value);
+    $(this).addClass('selected').siblings().removeClass('selected');
+    var value=$(this).find('td:nth-child(9)').html();
+    $("input[name=MessageID]").val(value);
 
-});
+  });
 };
 
 function submitJob(workspace) {
@@ -93,7 +92,7 @@ function submitJob(workspace) {
       params += element.name+"="+element[element.selectedIndex].value+"&";
     } else if( element.type == "checkbox" ){
       if( element.checked ) {
-          params += element.name+"="+element.value+"&";
+        params += element.name+"="+element.value+"&";
       }
     } else {
       params += element.name+"="+element.value+"&";
@@ -108,21 +107,24 @@ function submitJob(workspace) {
   FMEServer.runDataStreaming( repository, workspace, params, showResults );
 }
 
-setTimeout(doSomething, 1000);
+// This function sets the defaults for the DB Summary and disables & links the DB connection
 
-function doSomething(){
+function setDefaults(){
 
   $("#311MessageDBsummary\\.fmw span.db_connection.fmes-form-component select").prop("disabled", true);
 
   $("#UpdateDepartmentDB\\.fmw span.db_connection.fmes-form-component select").change(function() {
-  var val = $(this).val();
-  $('#311MessageDBsummary\\.fmw span.db_connection.fmes-form-component select option').each(function(){
-    var val2 = $(this).html();
-    if (val2 == val) {
-      $(this).prop('selected', true);
-    } else {
-      $(this).prop('selected', false);
-    }
+    var val = $(this).val();
+    $('#311MessageDBsummary\\.fmw span.db_connection.fmes-form-component select option').each(function(){
+      var val2 = $(this).html();
+      if (val2 == val) {
+        $(this).prop('selected', true);
+      } else {
+        $(this).prop('selected', false);
+      }
+    });
   });
-});
+  $("#311MessageDBsummary\\.fmw span.RequestType.fmes-form-component select").prop("value", "ALL");
+  $("#311MessageDBsummary\\.fmw span.Status.fmes-form-component select").prop("value", "ALL");
+  $("#311PublicMessageLoader\\.fmw span.RequestType.fmes-form-component select").prop("value", "Safety");
 };
